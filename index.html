@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Catalog</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #e27f23;
+      color: #111314;
+    }
+
+    .navbar {
+      background-color: #b1d6f1 !important;
+    }
+
+    .navbar-brand,
+    .nav-link {
+      color: #310707 !important;
+    }
+
+    .card {
+      border-radius: 1rem;
+      background-color: #f7f6f6;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .filter-container {
+      margin-bottom: 1.5rem;
+    }
+
+    select.form-select {
+      background-color: #f1f9ff;
+    }
+
+    .center-image {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: #b1d6f1;
+      color: #000;
+      padding: 1rem 0;
+      margin-top: 3rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light mb-4 shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">COURSES</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Get Started</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Help</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Demo</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container py-5">
+    <div class="center-image">
+      <img src="symbol.png" alt="Logo" style="width: 120px; height: auto;" />
+    </div>
+    <h1 class="text-center mb-4">Course Catalog</h1>
+
+    <div class="row filter-container">
+      <div class="col-md-6">
+        <select id="topicFilter" class="form-select">
+          <option value="">All Topics</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Design">Design</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <select id="timeFilter" class="form-select">
+          <option value="">All Time Estimates</option>
+          <option value="Short">Short (0-5 hrs)</option>
+          <option value="Medium">Medium (5-15 hrs)</option>
+          <option value="Long">Long (15+ hrs)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Courses will be rendered here -->
+    <div class="row" id="courseList"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Course Catalog. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const coursesData = [
+      {
+        title: "HTML & CSS Basics",
+        topic: "Web Development",
+        time: "Short",
+        duration: "3 hours",
+        link: "https://www.youtube.com/watch?v=UB1O30fR-EE"
+      },
+      {
+        title: "Intro to Python for Data Analysis",
+        topic: "Data Science",
+        time: "Medium",
+        duration: "10 hours",
+        link: "https://www.youtube.com/watch?v=r-uOLxNrNk8"
+      },
+      {
+        title: "UX/UI Design Bootcamp",
+        topic: "Design",
+        time: "Long",
+        duration: "20 hours",
+        link: "https://www.youtube.com/watch?v=_j3e7yq-5zs"
+      },
+      {
+        title: "JavaScript Essentials",
+        topic: "Web Development",
+        time: "Medium",
+        duration: "8 hours",
+        link: "https://www.youtube.com/watch?v=W6NZfCO5SIk"
+      },
+      {
+        title: "React Fundamentals",
+        topic: "Web Development",
+        time: "Long",
+        duration: "18 hours",
+        link: "https://www.youtube.com/watch?v=bMknfKXIFA8"
+      },
+      {
+        title: "Machine Learning Basics",
+        topic: "Data Science",
+        time: "Long",
+        duration: "22 hours",
+        link: "https://www.youtube.com/watch?v=Gv9_4yMHFhI"
+      },
+      {
+        title: "SQL for Beginners",
+        topic: "Data Science",
+        time: "Short",
+        duration: "4 hours",
+        link: "https://www.youtube.com/watch?v=HXV3zeQKqGY"
+      },
+      {
+        title: "Adobe XD for UI Design",
+        topic: "Design",
+        time: "Medium",
+        duration: "12 hours",
+        link: "https://www.youtube.com/watch?v=68w2VwalD5w"
+      },
+      {
+        title: "Typography in Web Design",
+        topic: "Design",
+        time: "Short",
+        duration: "2 hours",
+        link: "https://www.youtube.com/watch?v=6c3_tMNqaPY"
+      }
+    ];
+
+    const courseList = document.getElementById("courseList");
+    const topicFilter = document.getElementById("topicFilter");
+    const timeFilter = document.getElementById("timeFilter");
+
+    function renderCourses() {
+      courseList.innerHTML = "";
+      const topic = topicFilter.value;
+      const time = timeFilter.value;
+
+      const filtered = coursesData.filter(course => {
+        const topicMatch = !topic || course.topic === topic;
+        const timeMatch = !time || course.time === time;
+        return topicMatch && timeMatch;
+      });
+
+      filtered.forEach(course => {
+        const col = document.createElement("div");
+        col.className = "col-md-4 mb-4 course";
+        col.dataset.topic = course.topic;
+        col.dataset.time = course.time;
+
+        col.innerHTML = `
+          <div class="card p-3">
+            <h5>${course.title}</h5>
+            <p>Topic: ${course.topic}</p>
+            <p>Estimated Time: ${course.duration}</p>
+            <a href="${course.link}" target="_blank" class="btn btn-primary btn-sm mt-2">Watch Now</a>
+          </div>
+        `;
+        courseList.appendChild(col);
+      });
+    }
+
+    topicFilter.addEventListener("change", renderCourses);
+    timeFilter.addEventListener("change", renderCourses);
+    renderCourses(); // initial render
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
